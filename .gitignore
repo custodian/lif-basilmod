@@ -1,0 +1,11 @@
+*.base64
+*.cmd
+*.cs.dso
+*.exe
+*.gui.dso
+*/_cache/*
+/client/lastserver.uuid
+/client/menu.cs
+/server/GMAnnounce/client/logo/*.png
+/server/GMAnnounce/client/sound/*.ogg
+/server/Heraldry/client/flags/*.png

@@ -1,0 +1,197 @@
+if (isObject(BMGUIGMAnnounceBaseProfile)) {
+	BMGUIGMAnnounceBaseProfile.delete();
+}
+singleton GuiControlProfile(BMGUIGMAnnounceBaseProfile: GuiBaseTextProfile)
+{
+   globalImageIndex = "monument";
+   border = "none";
+};
+
+if (isObject(BMGUIGMAnnounceTextProfile)) {
+	BMGUIGMAnnounceTextProfile.delete();
+}
+singleton GuiControlProfile(BMGUIGMAnnounceTextProfile: BMGUIGMAnnounceBaseProfile)
+{
+   fontSize = 24;
+   fontColor = "176 152 122";
+   fontColorNA = "176 152 122";
+   fontColorHL = "176 152 122";
+
+   canKeyFocus = true;
+   cursorColor = "176 152 122";
+};
+
+if (isObject(BMGUIGMAnnounceTextAreaProfile)) {
+	BMGUIGMAnnounceTextAreaProfile.delete();
+}
+singleton GuiControlProfile(BMGUIGMAnnounceTextAreaProfile: GuiBaseTextProfile)
+{
+	globalImageIndex = "craft";
+	border = "all_tiling";
+};
+
+package BasilModGMAnnounce {
+
+function BasilMod::gmannounce_guiCreateAnnounceWindow() {
+	if (isObject(BMGMAnnounceGuiWindow)) {
+		BMGMAnnounceGuiWindow.delete();
+	}
+	%guiContent = new GuiWindowCtrl(BMGMAnnounceGuiWindow) {
+		  text = "Make announcement";
+		  resizeWidth = "0";
+		  resizeHeight = "0";
+		  canMove = "1";
+		  canClose = "1";
+		  canMinimize = "0";
+		  canMaximize = "0";
+		  canCollapse = "0";
+		  edgeSnap = "0";
+		  position = "132 123";
+		  extent = "530 490";
+		  profile = "GuiWindowProfile";
+		  //className = "BMGMAnnounceWindow";
+		  
+		  new GuiTextCtrl() {
+			 text = "Image";
+			 maxLength = "1024";
+			 position = "20 50";
+			 extent = "70 26";
+			 profile = "GuiTextProfile";
+		  };
+
+		  new GuiPopUpMenuCtrlEx() {
+			position = "100 40";
+			extent = "370 50";
+			cellHeight = "46";
+			createScrollCommand = "createPopUpScroll();";
+			profile = "GuiSkillPopUpProfile";
+		    //profile = "optionsPopUpProfile";
+            backPnlProfile = "GuiPopUpBorder";
+			scrollProfile = "GuiScrollProfile";
+			maxPopUpHeight = "300";
+			internalName = "logosList";
+			addedPopUpWidth = "-30";
+		  };
+		  
+		  new GuiTextCtrl() {
+			 text = "Sound";
+			 maxLength = "1024";
+			 position = "20 100";
+			 extent = "70 26";
+			 profile = "GuiTextProfile";
+		  };
+
+		  new GuiPopUpMenuCtrlEx() {
+			position = "100 90";
+			extent = "370 50";
+			cellHeight = "46";
+			createScrollCommand = "createPopUpScroll();";
+			profile = "GuiSkillPopUpProfile";
+		    //profile = "optionsPopUpProfile";
+            backPnlProfile = "GuiPopUpBorder";
+			scrollProfile = "GuiScrollProfile";
+			maxPopUpHeight = "300";
+			internalName = "soundsList";
+			addedPopUpWidth = "-30";
+		  };
+
+		  new GuiButtonCtrl() {
+			 text = "Test";
+			 buttonType = "PushButton";
+			 position = "20 410";
+			 extent = "209 67";
+			 profile = "SelectionListBtnProfile";
+			 tooltipProfile = "GuiToolTipProfile";
+			 className = "BMGMAnnounceTestAnnounce";
+		  };
+		  
+		  new GuiButtonCtrl() {
+			 text = "Announce";
+			 buttonType = "PushButton";
+			 position = "300 410";
+			 extent = "209 67";
+			 profile = "SelectionListBtnProfile";
+			 tooltipProfile = "GuiToolTipProfile";
+			 className = "BMGMAnnounceMakeAnnounce";
+		  };
+		  
+		 new GuiControl() {
+			position = "15 150";
+			extent = "500 250";
+			profile = "BMGUIGMAnnounceTextAreaProfile";
+		 };
+		 
+		 new GuiScrollCtrl() {
+			 willFirstRespond = "1";
+			 hScrollBar = "alwaysOff";
+			 vScrollBar = "alwaysOn";
+			 addContentHeight = "0";
+			 addContentWidth = "8";
+			 constantThumbHeight = "1";
+			 childMargin = "0 0";
+			 position = "20 155";
+			 extent = "500 250";
+			 trackOffset = "8";
+			 profile = "GuiScrollSkillInfoProfile";//"GuiScrollProfile";
+			 
+			 new GuiMLTextEditCtrl() {
+				willFirstRespond = "1";
+				allowColorChars = "1";
+				maxChars = "-1";
+				useURLMouseCursor = "0";
+				position = "0 0";
+				extent = "440 247";
+				minExtent = "8 2";
+				horizSizing = "right";
+				vertSizing = "bottom";
+				profile = "BMGUIGMAnnounceTextProfile";
+				visible = "1";
+				active = "1";
+				tooltipProfile = "GuiToolTipProfile";
+				hovertime = "1000";
+				isContainer = "0";
+				canSave = "1";
+				canSaveDynamicFields = "0";
+				internalName = "messageText";
+			 };
+		  };
+	   };
+	   return %guiContent;
+   }
+   
+   function BMGMAnnounceGuiWindow::close(%this) {
+		if (%this.isAwake()) {
+			PlayGUI.remove(%this);
+			%this.safeDeleteObject();
+		}
+	}
+
+	function BMGMAnnounceGuiWindow::open(%this) {
+		if (!%this.isAwake()) {
+			PlayGUI.addGuiControl(%this);
+			%this-->messageText.setFirstResponder();
+		}
+	}
+	
+	function BMGMAnnounceGuiWindow::onClose(%this) {
+		%this.close();
+	}	
+		
+	function BMGMAnnounceGuiWindow::onWake(%this) {
+		loadObjectPropertyXml(%this, "BMGMAnnounceWindow");
+		setCmFreelookMode(false);
+	}
+
+	function BMGMAnnounceGuiWindow::onSleep(%this) {
+		%this-->messageText.setText("");
+		saveObjectPropertyXml(%this, "BMGMAnnounceWindow");
+	}
+	
+	function BMGMAnnounceTestAnnounce::onAction(%this) {
+		BasilMod.gmannounce_testAnnounce();
+	}
+	
+	function BMGMAnnounceMakeAnnounce::onAction(%this) {
+		BasilMod.gmannounce_makeAnnounce();
+	}
+};

@@ -48,9 +48,15 @@ function BasilMod::gmannounce_guiCreateAnnounceWindow() {
 		  edgeSnap = "0";
 		  position = "132 123";
 		  extent = "530 490";
-		  profile = "GuiWindowProfile";
-		  //className = "BMGMAnnounceWindow";
-		  
+		  profile = "GuiAutoCursorWindowProfile";
+
+		  new GuiContainer() {
+           docking = Client;
+           extent = "530 490";
+           profile = "GuiAtlas3TiledImageProfile";
+           backgroundIndex = "LearningWindowBackground";
+		  };
+
 		  new GuiTextCtrl() {
 			 text = "Image";
 			 maxLength = "1024";
@@ -64,15 +70,14 @@ function BasilMod::gmannounce_guiCreateAnnounceWindow() {
 			extent = "370 50";
 			cellHeight = "46";
 			createScrollCommand = "createPopUpScroll();";
-			profile = "GuiSkillPopUpProfile";
-		    //profile = "optionsPopUpProfile";
+			profile = "CreateCharWindowPopUpProfile";
             backPnlProfile = "GuiPopUpBorder";
 			scrollProfile = "GuiScrollProfile";
 			maxPopUpHeight = "300";
 			internalName = "logosList";
 			addedPopUpWidth = "-30";
 		  };
-		  
+
 		  new GuiTextCtrl() {
 			 text = "Sound";
 			 maxLength = "1024";
@@ -86,8 +91,7 @@ function BasilMod::gmannounce_guiCreateAnnounceWindow() {
 			extent = "370 50";
 			cellHeight = "46";
 			createScrollCommand = "createPopUpScroll();";
-			profile = "GuiSkillPopUpProfile";
-		    //profile = "optionsPopUpProfile";
+			profile = "CreateCharWindowPopUpProfile";
             backPnlProfile = "GuiPopUpBorder";
 			scrollProfile = "GuiScrollProfile";
 			maxPopUpHeight = "300";
@@ -95,32 +99,34 @@ function BasilMod::gmannounce_guiCreateAnnounceWindow() {
 			addedPopUpWidth = "-30";
 		  };
 
-		  new GuiButtonCtrl() {
+		  new guiHorzTilingButtonCtrl() {
 			 text = "Test";
 			 buttonType = "PushButton";
 			 position = "20 410";
-			 extent = "209 67";
-			 profile = "SelectionListBtnProfile";
+			 extent = "209 44";
+			 profile = "BuildPositionButtonProfile";
 			 tooltipProfile = "GuiToolTipProfile";
 			 className = "BMGMAnnounceTestAnnounce";
+			 imageIndex = H44Btn;
 		  };
-		  
-		  new GuiButtonCtrl() {
+
+		  new guiHorzTilingButtonCtrl() {
 			 text = "Announce";
 			 buttonType = "PushButton";
 			 position = "300 410";
-			 extent = "209 67";
-			 profile = "SelectionListBtnProfile";
+			 extent = "209 44";
+			 profile = "BuildPositionButtonProfile";
 			 tooltipProfile = "GuiToolTipProfile";
 			 className = "BMGMAnnounceMakeAnnounce";
+			 imageIndex = H44Btn;
 		  };
-		  
+
 		 new GuiControl() {
 			position = "15 150";
 			extent = "500 250";
 			profile = "BMGUIGMAnnounceTextAreaProfile";
 		 };
-		 
+
 		 new GuiScrollCtrl() {
 			 willFirstRespond = "1";
 			 hScrollBar = "alwaysOff";
@@ -132,8 +138,8 @@ function BasilMod::gmannounce_guiCreateAnnounceWindow() {
 			 position = "20 155";
 			 extent = "500 250";
 			 trackOffset = "8";
-			 profile = "GuiScrollSkillInfoProfile";//"GuiScrollProfile";
-			 
+			 profile = "GuiEagleScrollBarProfile";
+
 			 new GuiMLTextEditCtrl() {
 				willFirstRespond = "1";
 				allowColorChars = "1";
@@ -158,7 +164,7 @@ function BasilMod::gmannounce_guiCreateAnnounceWindow() {
 	   };
 	   return %guiContent;
    }
-   
+
    function BMGMAnnounceGuiWindow::close(%this) {
 		if (%this.isAwake()) {
 			PlayGUI.remove(%this);
@@ -172,11 +178,11 @@ function BasilMod::gmannounce_guiCreateAnnounceWindow() {
 			%this-->messageText.setFirstResponder();
 		}
 	}
-	
+
 	function BMGMAnnounceGuiWindow::onClose(%this) {
 		%this.close();
-	}	
-		
+	}
+
 	function BMGMAnnounceGuiWindow::onWake(%this) {
 		loadObjectPropertyXml(%this, "BMGMAnnounceWindow");
 		setCmFreelookMode(false);
@@ -186,11 +192,11 @@ function BasilMod::gmannounce_guiCreateAnnounceWindow() {
 		%this-->messageText.setText("");
 		saveObjectPropertyXml(%this, "BMGMAnnounceWindow");
 	}
-	
+
 	function BMGMAnnounceTestAnnounce::onAction(%this) {
 		BasilMod.gmannounce_testAnnounce();
 	}
-	
+
 	function BMGMAnnounceMakeAnnounce::onAction(%this) {
 		BasilMod.gmannounce_makeAnnounce();
 	}

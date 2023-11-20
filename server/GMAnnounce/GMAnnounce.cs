@@ -98,5 +98,5 @@ if (!isObject(BasilMod) || $BasilMod::pack::version < 4) {
 } else {
 	activatePackage("BasilModGMAnnounce");
 	BasilMod::gmannounce_init();
-	echo("BasilMod::GMAnnounce v4a loaded.");
+	echo("BasilMod::GMAnnounce v5 loaded.");
 }
